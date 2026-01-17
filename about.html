@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About | Planetary Student in Landscape Architecture Index</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'IBM Plex Sans', sans-serif;
+            background-color: #0a0a0a;
+            color: #e8e4de;
+            min-height: 100vh;
+            line-height: 1.7;
+        }
+        
+        .about-header {
+            padding: 20px 40px;
+            border-bottom: 1px solid #2a2a2a;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .about-header a {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.75rem;
+            color: #a8a4a0;
+            text-decoration: none;
+            letter-spacing: 0.05em;
+            transition: color 0.2s ease;
+        }
+        
+        .about-header a:hover {
+            color: #e8e4de;
+        }
+        
+        .about-nav {
+            display: flex;
+            gap: 30px;
+        }
+        
+        .about-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 80px 40px 120px;
+        }
+        
+        .about-title {
+            font-size: 2rem;
+            font-weight: 400;
+            margin-bottom: 10px;
+            letter-spacing: -0.02em;
+        }
+        
+        .about-subtitle {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.85rem;
+            color: #a8a4a0;
+            margin-bottom: 60px;
+            letter-spacing: 0.03em;
+        }
+        
+        .about-section {
+            margin-bottom: 50px;
+        }
+        
+        .about-section p {
+            font-size: 1rem;
+            color: #c8c4c0;
+            margin-bottom: 1.5em;
+        }
+        
+        .about-section p:first-of-type::first-letter {
+            font-size: 3rem;
+            float: left;
+            line-height: 1;
+            margin-right: 10px;
+            margin-top: 5px;
+            color: #c49358;
+        }
+        
+        .highlight-text {
+            font-size: 1.15rem;
+            color: #e8e4de;
+            font-weight: 400;
+            line-height: 1.6;
+            padding: 30px 0;
+            border-top: 1px solid #2a2a2a;
+            border-bottom: 1px solid #2a2a2a;
+            margin: 40px 0;
+        }
+        
+        .themes-section {
+            margin-top: 60px;
+            padding-top: 40px;
+            border-top: 1px solid #2a2a2a;
+        }
+        
+        .themes-title {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: #6a6662;
+            margin-bottom: 30px;
+        }
+        
+        .themes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+        }
+        
+        .theme-item {
+            padding: 20px;
+            background: #141414;
+            border-radius: 4px;
+            border-left: 3px solid #c49358;
+        }
+        
+        .theme-decade {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.75rem;
+            color: #c49358;
+            margin-bottom: 8px;
+        }
+        
+        .theme-keywords {
+            font-size: 0.9rem;
+            color: #a8a4a0;
+        }
+        
+        .author-section {
+            margin-top: 80px;
+            padding-top: 40px;
+            border-top: 1px solid #2a2a2a;
+            text-align: center;
+        }
+        
+        .author-name {
+            font-size: 1.1rem;
+            font-weight: 500;
+            margin-bottom: 8px;
+        }
+        
+        .author-affiliation {
+            font-size: 0.9rem;
+            color: #a8a4a0;
+            margin-bottom: 40px;
+        }
+        
+        .credits-section {
+            margin-top: 40px;
+            padding: 30px;
+            background: #141414;
+            border-radius: 4px;
+        }
+        
+        .credits-title {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: #6a6662;
+            margin-bottom: 15px;
+        }
+        
+        .credits-text {
+            font-size: 0.85rem;
+            color: #a8a4a0;
+            line-height: 1.8;
+        }
+        
+        .legend-section {
+            margin-top: 80px;
+            padding-top: 40px;
+            border-top: 1px solid #2a2a2a;
+        }
+        
+        .legend-title {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: #6a6662;
+            margin-bottom: 30px;
+        }
+        
+        .legend-group {
+            margin-bottom: 40px;
+        }
+        
+        .legend-group-title {
+            font-size: 0.9rem;
+            font-weight: 500;
+            margin-bottom: 15px;
+            color: #e8e4de;
+        }
+        
+        .legend-items {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 12px;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.85rem;
+            color: #a8a4a0;
+        }
+        
+        .legend-swatch {
+            width: 16px;
+            height: 16px;
+            border-radius: 3px;
+            flex-shrink: 0;
+        }
+        
+        /* Entry Type Colors */
+        .swatch-pd { background: #a87d42; }
+        .swatch-id { background: #9a6640; }
+        .swatch-bib { background: #c4b078; }
+        
+        /* Focus Area Colors */
+        .swatch-fa01 { background: #d4a574; }
+        .swatch-fa02 { background: #b5784d; }
+        .swatch-fa03 { background: #bc6b4a; }
+        .swatch-fa04 { background: #8a9a9c; }
+        .swatch-fa05 { background: #8a7c4c; }
+        .swatch-fa06 { background: #9e9460; }
+        
+        .code-tag {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.75rem;
+            padding: 2px 6px;
+            background: #2a2a2a;
+            border-radius: 2px;
+            margin-right: 5px;
+        }
+        
+        @media (max-width: 600px) {
+            .about-container {
+                padding: 40px 20px 80px;
+            }
+            
+            .about-title {
+                font-size: 1.5rem;
+            }
+            
+            .about-nav {
+                gap: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="about-header">
+        <a href="index.html">← Home</a>
+        <nav class="about-nav">
+            <a href="network.html">Network</a>
+            <a href="network.html?view=timeline">Timeline</a>
+        </nav>
+    </header>
+    
+    <main class="about-container">
+        <h1 class="about-title">Design Pedagogies for the Planetary Student</h1>
+        <p class="about-subtitle">in Landscape Architecture</p>
+        
+        <section class="about-section">
+            <p>Consider landscape architecture graduates in the near future, strategically positioned at critical intersections of systemic change. These graduates emerge from alternative pathways that have expanded the discipline's approach to professional practice. Planetary Landscape Architecture graduates are deeply inspired to cultivate a world of generosity and hope through which multiple worlds can flourish together within Earth's interconnected systems. As students and then practitioners, they strive for an equitable and just planetary future.</p>
+            
+            <p>The planetary world is one that recognizes the Earth as a complex interconnected set of systems composed of multiple worlds and knowledge structures. It is a world that acknowledges diverse cosmologies, temporalities, and more-than-human relations. It is a world that emphasizes ethical responsibilities across boundaries of species, cultures, and geographies, in solidarity with shared environmental challenges.</p>
+        </section>
+        
+        <div class="highlight-text">
+            This is the world of the Planetary Student. For that student, the Earth cannot helpfully be regarded as a single, globalized, containable entity with a determinable future.
+        </div>
+        
+        <section class="about-section">
+            <p>Future Planetary Landscape Architecture students will embody a pluriversal approach to their discipline, recognising the Earth consists not of a single world, but of many worlds in dynamic relation. These students will be skilled in navigating multiple knowledge systems. For example, they will be able to integrate perspectives from diverse epistemologies, scientific forms of ecological systems justifications, and landscape ethics. Their suite of skills is developed as recognition that no single framework can adequately address complex planetary challenges to which the discipline needs to respond ethically.</p>
+            
+            <p>This exhibition maps the historical development of design studio pedagogy and approaches embracing pluriversal knowledge integration, cultural interface pedagogy, relational design practices, critical time consciousness, and collaborative design studio ecologies. By juxtaposing these approaches across the Experiments Wall's dual surfaces, the exhibition reveals both the evolution of design studio pedagogies to date and the future possibilities.</p>
+        </section>
+        
+        <section class="themes-section">
+            <h2 class="themes-title">Emerging Themes: 2020s</h2>
+            <div class="themes-grid">
+                <div class="theme-item">
+                    <div class="theme-decade">Knowledge</div>
+                    <div class="theme-keywords">intelligences, forensic, reconstructed</div>
+                </div>
+                <div class="theme-item">
+                    <div class="theme-decade">Futures</div>
+                    <div class="theme-keywords">speculative, adaptive, uncertainty</div>
+                </div>
+                <div class="theme-item">
+                    <div class="theme-decade">Materials</div>
+                    <div class="theme-keywords">crisis, material flows, relational</div>
+                </div>
+                <div class="theme-item">
+                    <div class="theme-decade">Ecologies</div>
+                    <div class="theme-keywords">multispecies, black ecologies, rights</div>
+                </div>
+                <div class="theme-item">
+                    <div class="theme-decade">Practice</div>
+                    <div class="theme-keywords">participation, boundary, urbanity</div>
+                </div>
+                <div class="theme-item">
+                    <div class="theme-decade">Labor</div>
+                    <div class="theme-keywords">sensing, labor, matter</div>
+                </div>
+                <div class="theme-item">
+                    <div class="theme-decade">Justice</div>
+                    <div class="theme-keywords">curriculum, racism, reparation</div>
+                </div>
+                <div class="theme-item">
+                    <div class="theme-decade">Indigeneity</div>
+                    <div class="theme-keywords">crisis, indigeneity, representation</div>
+                </div>
+                <div class="theme-item">
+                    <div class="theme-decade">Race</div>
+                    <div class="theme-keywords">ecology, enclosure, race</div>
+                </div>
+                <div class="theme-item">
+                    <div class="theme-decade">Access</div>
+                    <div class="theme-keywords">pluralism, equity, accessibility</div>
+                </div>
+            </div>
+        </section>
+        
+        <section class="legend-section">
+            <h2 class="legend-title">Index Legend</h2>
+            
+            <div class="legend-group">
+                <h3 class="legend-group-title">Entry Types</h3>
+                <div class="legend-items">
+                    <div class="legend-item">
+                        <span class="legend-swatch swatch-pd"></span>
+                        <span><span class="code-tag">PD</span> Pedagogical Development</span>
+                    </div>
+                    <div class="legend-item">
+                        <span class="legend-swatch swatch-id"></span>
+                        <span><span class="code-tag">ID</span> Institutional Development</span>
+                    </div>
+                    <div class="legend-item">
+                        <span class="legend-swatch swatch-bib"></span>
+                        <span><span class="code-tag">BIB</span> Theoretical Foundation</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="legend-group">
+                <h3 class="legend-group-title">Pedagogical Priorities</h3>
+                <div class="legend-items">
+                    <div class="legend-item">
+                        <span class="code-tag">PP01</span> The Discipline
+                    </div>
+                    <div class="legend-item">
+                        <span class="code-tag">PP02</span> The Design Studio
+                    </div>
+                    <div class="legend-item">
+                        <span class="code-tag">PP03</span> The Academic Program
+                    </div>
+                </div>
+            </div>
+            
+            <div class="legend-group">
+                <h3 class="legend-group-title">Focus Areas</h3>
+                <div class="legend-items">
+                    <div class="legend-item">
+                        <span class="legend-swatch swatch-fa01"></span>
+                        <span><span class="code-tag">FA01</span> Curriculum</span>
+                    </div>
+                    <div class="legend-item">
+                        <span class="legend-swatch swatch-fa02"></span>
+                        <span><span class="code-tag">FA02</span> Program Structure</span>
+                    </div>
+                    <div class="legend-item">
+                        <span class="legend-swatch swatch-fa03"></span>
+                        <span><span class="code-tag">FA03</span> Studio Methods</span>
+                    </div>
+                    <div class="legend-item">
+                        <span class="legend-swatch swatch-fa04"></span>
+                        <span><span class="code-tag">FA04</span> Technology</span>
+                    </div>
+                    <div class="legend-item">
+                        <span class="legend-swatch swatch-fa05"></span>
+                        <span><span class="code-tag">FA05</span> Social Justice</span>
+                    </div>
+                    <div class="legend-item">
+                        <span class="legend-swatch swatch-fa06"></span>
+                        <span><span class="code-tag">FA06</span> Collaboration</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section class="author-section">
+            <p class="author-name">Dr. Rosalea Monacella</p>
+            <p class="author-affiliation">Harvard Graduate School of Design</p>
+            
+            <div class="credits-section">
+                <h3 class="credits-title">Acknowledgements</h3>
+                <p class="credits-text">
+                    Special thanks to: Dan Borelli, David Zimmerman & the exhibition team, 
+                    Sarah Whiting, Gary Hilderbrand, Craig Douglas, Sean Hogan, Simone Sandholz, 
+                    Alessandro Martinelli, Charles Waldheim, Makio Yamamoto, Racha Doughman, Fran Arrieta
+                </p>
+            </div>
+        </section>
+    </main>
+</body>
+</html>

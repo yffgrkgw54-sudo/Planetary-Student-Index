@@ -233,6 +233,8 @@ class PlanetaryStudentNetwork {
                 
                 if (view === 'timeline') {
                     this.renderTimeline();
+                } else if (view === 'radial') {
+                    this.renderRadialView();
                 }
             });
         });
@@ -855,8 +857,447 @@ class PlanetaryStudentNetwork {
     }
 }
 
+    // ========================================
+    // RADIAL VIEW
+    // ========================================
+    
+    setupRadialSVG() {
+        const container = document.querySelector('.visualization-area');
+        const size = Math.min(container.clientWidth, container.clientHeight);
+        
+        this.radialSvg = d3.select('#radial-svg')
+            .attr('width', container.clientWidth)
+            .attr('height', container.clientHeight);
+        
+        // Create groups
+        this.radialSvg.append('g').attr('class', 'radial-links-group');
+        this.radialSvg.append('g').attr('class', 'radial-nodes-group');
+        this.radialSvg.append('g').attr('class', 'radial-labels-group');
+        
+        // Setup zoom
+        const zoom = d3.zoom()
+            .scaleExtent([0.3, 3])
+            .on('zoom', (event) => {
+                this.radialSvg.selectAll('g').attr('transform', event.transform);
+            });
+        
+        this.radialSvg.call(zoom);
+    }
+    
+    renderRadialView() {
+        if (!this.radialSvg) {
+            this.setupRadialSVG();
+        }
+        
+        const container = document.querySelector('.visualization-area');
+        const width = container.clientWidth;
+        const height = container.clientHeight;
+        const centerX = width / 2;
+        const centerY = height / 2;
+        const maxRadius = Math.min(width, height) / 2 - 80;
+        
+        // Time scale: 1857-2025 mapped to radius
+        const timeScale = d3.scaleLinear()
+            .domain([1857, 2025])
+            .range([50, maxRadius]);
+        
+        // Angle scale based on pedagogical priority sectors
+        const ppSectors = {
+            'PP01': { start: 210, end: 330 },  // The Discipline - bottom left
+            'PP02': { start: 330, end: 90 },   // The Design Studio - top
+            'PP03': { start: 90, end: 210 }    // The Academic Program - bottom right
+        };
+        
+        // Position nodes radially
+        const positionedNodes = this.filteredNodes.map(node => {
+            const r = timeScale(node.year);
+            
+            // Determine primary PP sector
+            const primaryPP = node.priorities[0] || 'PP01';
+            const sector = ppSectors[primaryPP];
+            
+            // Position within sector based on focus area
+            const primaryFA = node.focusAreas[0] || 'FA01';
+            const faIndex = parseInt(primaryFA.replace('FA0', '')) - 1;
+            
+            // Calculate angle within sector
+            let sectorSpan = sector.end - sector.start;
+            if (sectorSpan < 0) sectorSpan += 360;
+            
+            const angleOffset = (faIndex / 6) * sectorSpan;
+            let angle = sector.start + angleOffset + Math.random() * 15 - 7.5;
+            angle = (angle * Math.PI) / 180; // Convert to radians
+            
+            return {
+                ...node,
+                x: centerX + r * Math.cos(angle),
+                y: centerY + r * Math.sin(angle),
+                r: r,
+                angle: angle
+            };
+        });
+        
+        // Create node lookup
+        const nodeById = new Map(positionedNodes.map(n => [n.id, n]));
+        
+        // Position links
+        const positionedLinks = this.filteredLinks.map(link => {
+            const sourceId = typeof link.source === 'object' ? link.source.id : link.source;
+            const targetId = typeof link.target === 'object' ? link.target.id : link.target;
+            return {
+                ...link,
+                source: nodeById.get(sourceId),
+                target: nodeById.get(targetId)
+            };
+        }).filter(l => l.source && l.target);
+        
+        // Clear and redraw
+        this.radialSvg.select('.radial-links-group').selectAll('*').remove();
+        this.radialSvg.select('.radial-nodes-group').selectAll('*').remove();
+        this.radialSvg.select('.radial-labels-group').selectAll('*').remove();
+        
+        // Draw concentric time rings
+        const timeRings = [1857, 1900, 1950, 2000, 2025];
+        const ringsGroup = this.radialSvg.select('.radial-links-group');
+        
+        timeRings.forEach(year => {
+            ringsGroup.append('circle')
+                .attr('cx', centerX)
+                .attr('cy', centerY)
+                .attr('r', timeScale(year))
+                .attr('fill', 'none')
+                .attr('stroke', '#2a2a2a')
+                .attr('stroke-width', 0.5);
+            
+            ringsGroup.append('text')
+                .attr('x', centerX + timeScale(year) + 5)
+                .attr('y', centerY)
+                .attr('fill', '#4a4a4a')
+                .attr('font-size', '10px')
+                .attr('font-family', 'IBM Plex Mono')
+                .text(year);
+        });
+        
+        // Draw PP sector lines
+        Object.entries(ppSectors).forEach(([pp, sector]) => {
+            const angle = (sector.start * Math.PI) / 180;
+            ringsGroup.append('line')
+                .attr('x1', centerX)
+                .attr('y1', centerY)
+                .attr('x2', centerX + maxRadius * Math.cos(angle))
+                .attr('y2', centerY + maxRadius * Math.sin(angle))
+                .attr('stroke', '#3a3a3a')
+                .attr('stroke-width', 1)
+                .attr('stroke-dasharray', '5,5');
+            
+            // PP labels
+            const labelAngle = (sector.start + 60) * Math.PI / 180;
+            ringsGroup.append('text')
+                .attr('x', centerX + (maxRadius + 30) * Math.cos(labelAngle))
+                .attr('y', centerY + (maxRadius + 30) * Math.sin(labelAngle))
+                .attr('fill', '#6a6a6a')
+                .attr('font-size', '11px')
+                .attr('font-family', 'IBM Plex Mono')
+                .attr('text-anchor', 'middle')
+                .text(pp);
+        });
+        
+        // Draw links
+        ringsGroup.selectAll('.radial-link')
+            .data(positionedLinks)
+            .enter()
+            .append('line')
+            .attr('class', d => `radial-link ${d.type}`)
+            .attr('x1', d => d.source.x)
+            .attr('y1', d => d.source.y)
+            .attr('x2', d => d.target.x)
+            .attr('y2', d => d.target.y)
+            .attr('stroke', d => d.type === 'lineage' ? '#c4b078' : '#4a4a4a')
+            .attr('stroke-width', d => d.type === 'lineage' ? 1.5 : 0.5)
+            .attr('stroke-dasharray', d => d.type === 'lineage' ? '4,2' : 'none')
+            .attr('opacity', 0.4);
+        
+        // Draw nodes
+        const nodesGroup = this.radialSvg.select('.radial-nodes-group');
+        
+        const nodeElements = nodesGroup.selectAll('.radial-node')
+            .data(positionedNodes)
+            .enter()
+            .append('circle')
+            .attr('class', d => `radial-node ${d.types.includes('BIB') ? 'bib' : ''}`)
+            .attr('cx', d => d.x)
+            .attr('cy', d => d.y)
+            .attr('r', d => d.types.includes('BIB') ? 8 : 5)
+            .attr('fill', d => this.getNodeColor(d))
+            .attr('stroke', d => d.types.includes('BIB') ? '#c4b078' : 'none')
+            .attr('stroke-width', d => d.types.includes('BIB') ? 2 : 0)
+            .attr('stroke-dasharray', d => d.types.includes('BIB') ? '2,2' : 'none')
+            .style('cursor', 'pointer')
+            .on('mouseover', (event, d) => {
+                this.tooltip
+                    .style('opacity', 1)
+                    .html(`<strong>${d.title}</strong><br>${d.year} | ${d.location}`)
+                    .style('left', (event.pageX + 10) + 'px')
+                    .style('top', (event.pageY - 10) + 'px');
+            })
+            .on('mouseout', () => {
+                this.tooltip.style('opacity', 0);
+            })
+            .on('click', (event, d) => {
+                this.showDetailPanel(d);
+            });
+    }
+    
+    // ========================================
+    // SHAREABLE URLS
+    // ========================================
+    
+    getStateFromURL() {
+        const params = new URLSearchParams(window.location.search);
+        return {
+            view: params.get('view'),
+            node: params.get('node') ? parseInt(params.get('node')) : null,
+            types: params.get('types')?.split(','),
+            priorities: params.get('pp')?.split(','),
+            focusAreas: params.get('fa')?.split(','),
+            timeStart: params.get('start') ? parseInt(params.get('start')) : null,
+            timeEnd: params.get('end') ? parseInt(params.get('end')) : null,
+            colorMode: params.get('color')
+        };
+    }
+    
+    applyURLState() {
+        const state = this.getStateFromURL();
+        
+        // Apply view
+        if (state.view) {
+            document.querySelectorAll('.view-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.view === state.view);
+            });
+            document.querySelectorAll('.view-container').forEach(v => {
+                v.classList.toggle('active', v.id === `${state.view}-view`);
+            });
+            if (state.view === 'timeline') {
+                setTimeout(() => this.renderTimeline(), 100);
+            } else if (state.view === 'radial') {
+                setTimeout(() => this.renderRadialView(), 100);
+            }
+        }
+        
+        // Apply filters
+        if (state.types) {
+            document.querySelectorAll('.filter-group input[type="checkbox"]').forEach(input => {
+                if (['PD', 'ID', 'BIB'].includes(input.value)) {
+                    input.checked = state.types.includes(input.value);
+                }
+            });
+        }
+        
+        if (state.priorities) {
+            document.querySelectorAll('.filter-group input[value^="PP"]').forEach(input => {
+                input.checked = state.priorities.includes(input.value);
+            });
+        }
+        
+        if (state.focusAreas) {
+            document.querySelectorAll('.filter-group input[value^="FA"]').forEach(input => {
+                input.checked = state.focusAreas.includes(input.value);
+            });
+        }
+        
+        if (state.timeStart) {
+            document.getElementById('time-range-start').value = state.timeStart;
+            document.getElementById('time-start').textContent = state.timeStart;
+        }
+        
+        if (state.timeEnd) {
+            document.getElementById('time-range-end').value = state.timeEnd;
+            document.getElementById('time-end').textContent = state.timeEnd;
+        }
+        
+        if (state.colorMode) {
+            const radio = document.querySelector(`input[name="node-display"][value="${state.colorMode}"]`);
+            if (radio) {
+                radio.checked = true;
+                this.colorMode = state.colorMode;
+            }
+        }
+        
+        // Apply filters and select node
+        this.applyFilters();
+        
+        if (state.node) {
+            setTimeout(() => {
+                const node = this.nodes.find(n => n.id === state.node);
+                if (node) {
+                    this.showDetailPanel(node);
+                    this.centerOnNode(node);
+                }
+            }, 500);
+        }
+    }
+    
+    generateShareURL() {
+        const params = new URLSearchParams();
+        
+        // Current view
+        const activeView = document.querySelector('.view-btn.active')?.dataset.view || 'network';
+        params.set('view', activeView);
+        
+        // Selected node
+        if (this.selectedNode) {
+            params.set('node', this.selectedNode.id);
+        }
+        
+        // Active filters
+        const activeTypes = Array.from(document.querySelectorAll('.filter-group input[type="checkbox"]:checked'))
+            .filter(i => ['PD', 'ID', 'BIB'].includes(i.value))
+            .map(i => i.value);
+        if (activeTypes.length < 3) params.set('types', activeTypes.join(','));
+        
+        const activePP = Array.from(document.querySelectorAll('.filter-group input[value^="PP"]:checked'))
+            .map(i => i.value);
+        if (activePP.length < 3) params.set('pp', activePP.join(','));
+        
+        const activeFA = Array.from(document.querySelectorAll('.filter-group input[value^="FA"]:checked'))
+            .map(i => i.value);
+        if (activeFA.length < 6) params.set('fa', activeFA.join(','));
+        
+        // Time range
+        const timeStart = parseInt(document.getElementById('time-range-start').value);
+        const timeEnd = parseInt(document.getElementById('time-range-end').value);
+        if (timeStart > 1857) params.set('start', timeStart);
+        if (timeEnd < 2025) params.set('end', timeEnd);
+        
+        // Color mode
+        if (this.colorMode !== 'type') params.set('color', this.colorMode);
+        
+        return `${window.location.origin}${window.location.pathname}?${params.toString()}`;
+    }
+    
+    showShareModal() {
+        const url = this.generateShareURL();
+        document.getElementById('share-url').value = url;
+        document.getElementById('share-modal').classList.add('open');
+    }
+    
+    copyShareURL() {
+        const input = document.getElementById('share-url');
+        input.select();
+        document.execCommand('copy');
+        
+        const btn = document.getElementById('copy-url-btn');
+        btn.textContent = 'Copied!';
+        setTimeout(() => btn.textContent = 'Copy', 2000);
+    }
+    
+    // ========================================
+    // EXCEL EXPORT
+    // ========================================
+    
+    exportExcel() {
+        // Create CSV content
+        const headers = ['ID', 'Year', 'Title', 'Location', 'Description', 'Types', 'Pedagogical Priorities', 'Focus Areas', 'Citation', 'Tags'];
+        
+        const rows = networkData.nodes.map(node => [
+            node.id,
+            node.year,
+            `"${(node.title || '').replace(/"/g, '""')}"`,
+            `"${(node.location || '').replace(/"/g, '""')}"`,
+            `"${(node.description || '').replace(/"/g, '""')}"`,
+            node.types?.join('; ') || '',
+            node.priorities?.join('; ') || '',
+            node.focusAreas?.join('; ') || '',
+            `"${(node.citation || '').replace(/"/g, '""')}"`,
+            node.tags?.join('; ') || ''
+        ]);
+        
+        const csvContent = [headers.join(','), ...rows.map(r => r.join(','))].join('\n');
+        
+        // Download as CSV (Excel-compatible)
+        const blob = new Blob(['\ufeff' + csvContent], { type: 'text/csv;charset=utf-8;' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'planetary-student-timeline.csv';
+        a.click();
+        URL.revokeObjectURL(url);
+    }
+    
+    // ========================================
+    // LEGEND TOGGLE
+    // ========================================
+    
+    setupLegend() {
+        const toggleBtn = document.getElementById('legend-toggle');
+        const panel = document.getElementById('legend-panel');
+        
+        if (toggleBtn && panel) {
+            toggleBtn.addEventListener('click', () => {
+                panel.classList.toggle('open');
+                toggleBtn.textContent = panel.classList.contains('open') ? 'Hide Legend' : 'Legend';
+            });
+        }
+    }
+    
+    // ========================================
+    // ANNOTATION LAYER
+    // ========================================
+    
+    annotations = [];
+    
+    addAnnotation(nodeId, text) {
+        this.annotations.push({
+            id: Date.now(),
+            nodeId,
+            text,
+            timestamp: new Date().toISOString()
+        });
+        this.saveAnnotations();
+    }
+    
+    removeAnnotation(annotationId) {
+        this.annotations = this.annotations.filter(a => a.id !== annotationId);
+        this.saveAnnotations();
+    }
+    
+    saveAnnotations() {
+        localStorage.setItem('planetary-student-annotations', JSON.stringify(this.annotations));
+    }
+    
+    loadAnnotations() {
+        const stored = localStorage.getItem('planetary-student-annotations');
+        if (stored) {
+            this.annotations = JSON.parse(stored);
+        }
+    }
+    
+    getAnnotationsForNode(nodeId) {
+        return this.annotations.filter(a => a.nodeId === nodeId);
+    }
+}
+
 // Initialize on DOM ready
 let network;
 document.addEventListener('DOMContentLoaded', () => {
     network = new PlanetaryStudentNetwork();
+    
+    // Setup share functionality
+    document.getElementById('share-btn')?.addEventListener('click', () => network.showShareModal());
+    document.getElementById('copy-url-btn')?.addEventListener('click', () => network.copyShareURL());
+    document.getElementById('close-share-modal')?.addEventListener('click', () => {
+        document.getElementById('share-modal').classList.remove('open');
+    });
+    
+    // Setup export functionality
+    document.getElementById('export-btn')?.addEventListener('click', () => network.exportExcel());
+    
+    // Setup legend
+    network.setupLegend();
+    
+    // Load annotations
+    network.loadAnnotations();
+    
+    // Apply URL state after initial render
+    setTimeout(() => network.applyURLState(), 200);
 });

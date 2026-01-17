@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Planetary Student Timeline | Network Visualization</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-left">
+                <a href="index.html" class="home-link">←</a>
+                <h1 class="title">Planetary Student</h1>
+                <span class="subtitle">Index</span>
+            </div>
+            <div class="header-center">
+                <div class="view-toggle">
+                    <button class="view-btn active" data-view="network">Network</button>
+                    <button class="view-btn" data-view="radial">Radial</button>
+                    <button class="view-btn" data-view="timeline">Timeline</button>
+                </div>
+            </div>
+            <div class="header-right">
+                <button class="header-btn" id="share-btn" title="Share current view">Share</button>
+                <button class="header-btn" id="export-btn" title="Export data">Export</button>
+                <a href="about.html" class="header-btn">About</a>
+            </div>
+        </header>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <!-- Filter Panel -->
+            <aside class="filter-panel">
+                <div class="filter-section">
+                    <h3 class="filter-title">Entry Type</h3>
+                    <div class="filter-group">
+                        <label class="filter-item">
+                            <input type="checkbox" value="PD" checked>
+                            <span class="filter-swatch" data-type="PD"></span>
+                            <span>Pedagogical Development</span>
+                        </label>
+                        <label class="filter-item">
+                            <input type="checkbox" value="ID" checked>
+                            <span class="filter-swatch" data-type="ID"></span>
+                            <span>Institutional Development</span>
+                        </label>
+                        <label class="filter-item">
+                            <input type="checkbox" value="BIB" checked>
+                            <span class="filter-swatch" data-type="BIB"></span>
+                            <span>Theoretical Foundation</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="filter-section">
+                    <h3 class="filter-title">Pedagogical Priority</h3>
+                    <div class="filter-group">
+                        <label class="filter-item">
+                            <input type="checkbox" value="PP01" checked>
+                            <span class="filter-swatch" data-priority="PP01"></span>
+                            <span>PP01: The Discipline</span>
+                        </label>
+                        <label class="filter-item">
+                            <input type="checkbox" value="PP02" checked>
+                            <span class="filter-swatch" data-priority="PP02"></span>
+                            <span>PP02: The Design Studio</span>
+                        </label>
+                        <label class="filter-item">
+                            <input type="checkbox" value="PP03" checked>
+                            <span class="filter-swatch" data-priority="PP03"></span>
+                            <span>PP03: The Academic Program</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="filter-section">
+                    <h3 class="filter-title">Focus Area</h3>
+                    <div class="filter-group focus-areas">
+                        <label class="filter-item">
+                            <input type="checkbox" value="FA01" checked>
+                            <span class="filter-swatch" data-focus="FA01"></span>
+                            <span>FA01: Curriculum</span>
+                        </label>
+                        <label class="filter-item">
+                            <input type="checkbox" value="FA02" checked>
+                            <span class="filter-swatch" data-focus="FA02"></span>
+                            <span>FA02: Program Structure</span>
+                        </label>
+                        <label class="filter-item">
+                            <input type="checkbox" value="FA03" checked>
+                            <span class="filter-swatch" data-focus="FA03"></span>
+                            <span>FA03: Studio Methods</span>
+                        </label>
+                        <label class="filter-item">
+                            <input type="checkbox" value="FA04" checked>
+                            <span class="filter-swatch" data-focus="FA04"></span>
+                            <span>FA04: Technology</span>
+                        </label>
+                        <label class="filter-item">
+                            <input type="checkbox" value="FA05" checked>
+                            <span class="filter-swatch" data-focus="FA05"></span>
+                            <span>FA05: Social Justice</span>
+                        </label>
+                        <label class="filter-item">
+                            <input type="checkbox" value="FA06" checked>
+                            <span class="filter-swatch" data-focus="FA06"></span>
+                            <span>FA06: Collaboration</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="filter-section">
+                    <h3 class="filter-title">Time Period</h3>
+                    <div class="time-slider">
+                        <div class="slider-labels">
+                            <span id="time-start">1857</span>
+                            <span id="time-end">2025</span>
+                        </div>
+                        <input type="range" id="time-range-start" min="1857" max="2025" value="1857">
+                        <input type="range" id="time-range-end" min="1857" max="2025" value="2025">
+                    </div>
+                </div>
+
+                <div class="filter-section">
+                    <h3 class="filter-title">Node Display</h3>
+                    <div class="node-display-options">
+                        <label class="radio-item">
+                            <input type="radio" name="node-display" value="type" checked>
+                            <span>By Entry Type</span>
+                        </label>
+                        <label class="radio-item">
+                            <input type="radio" name="node-display" value="priority">
+                            <span>By Pedagogical Priority</span>
+                        </label>
+                        <label class="radio-item">
+                            <input type="radio" name="node-display" value="focus">
+                            <span>By Focus Area</span>
+                        </label>
+                        <label class="radio-item">
+                            <input type="radio" name="node-display" value="era">
+                            <span>By Era</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="filter-actions">
+                    <button class="btn btn-secondary" id="reset-filters">Reset Filters</button>
+                    <button class="btn btn-primary" id="add-entry-btn">+ Add Entry</button>
+                </div>
+            </aside>
+
+            <!-- Visualization Area -->
+            <div class="visualization-area">
+                <div id="network-view" class="view-container active">
+                    <svg id="network-svg"></svg>
+                </div>
+                <div id="radial-view" class="view-container">
+                    <svg id="radial-svg"></svg>
+                </div>
+                <div id="timeline-view" class="view-container">
+                    <div id="timeline-content"></div>
+                </div>
+                
+                <!-- Legend Toggle -->
+                <button class="legend-toggle" id="legend-toggle">Legend</button>
+                
+                <!-- Legend Panel -->
+                <div class="legend-panel" id="legend-panel">
+                    <div class="legend-section">
+                        <h4>Entry Types</h4>
+                        <div class="legend-item"><span class="legend-swatch" style="background: #a87d42"></span>PD: Pedagogical Development</div>
+                        <div class="legend-item"><span class="legend-swatch" style="background: #9a6640"></span>ID: Institutional Development</div>
+                        <div class="legend-item"><span class="legend-swatch" style="background: #c4b078"></span>BIB: Theoretical Foundation</div>
+                    </div>
+                    <div class="legend-section">
+                        <h4>Focus Areas</h4>
+                        <div class="legend-item"><span class="legend-swatch" style="background: #d4a574"></span>FA01: Curriculum</div>
+                        <div class="legend-item"><span class="legend-swatch" style="background: #b5784d"></span>FA02: Program Structure</div>
+                        <div class="legend-item"><span class="legend-swatch" style="background: #bc6b4a"></span>FA03: Studio Methods</div>
+                        <div class="legend-item"><span class="legend-swatch" style="background: #8a9a9c"></span>FA04: Technology</div>
+                        <div class="legend-item"><span class="legend-swatch" style="background: #8a7c4c"></span>FA05: Social Justice</div>
+                        <div class="legend-item"><span class="legend-swatch" style="background: #9e9460"></span>FA06: Collaboration</div>
+                    </div>
+                    <div class="legend-section">
+                        <h4>Connections</h4>
+                        <div class="legend-item"><span class="legend-line solid"></span>Thematic connection</div>
+                        <div class="legend-item"><span class="legend-line dashed"></span>Lineage / explicit</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Detail Panel -->
+            <aside class="detail-panel" id="detail-panel">
+                <button class="close-panel" id="close-detail">&times;</button>
+                <div class="detail-content">
+                    <div class="detail-placeholder">
+                        <p>Select a node to view details</p>
+                    </div>
+                </div>
+            </aside>
+        </main>
+
+        <!-- Add Entry Modal -->
+        <div class="modal-overlay" id="add-entry-modal">
+            <div class="modal">
+                <div class="modal-header">
+                    <h2>Add New Entry</h2>
+                    <button class="close-modal" id="close-modal">&times;</button>
+                </div>
+                <form class="entry-form" id="entry-form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="entry-year">Year</label>
+                            <input type="number" id="entry-year" min="1800" max="2030" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="entry-location">Location</label>
+                            <input type="text" id="entry-location" placeholder="City, Country">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="entry-title">Title</label>
+                        <input type="text" id="entry-title" required placeholder="Brief descriptive title">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="entry-description">Description</label>
+                        <textarea id="entry-description" rows="4" required placeholder="Full description of the development..."></textarea>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Entry Type</label>
+                            <div class="checkbox-group">
+                                <label><input type="checkbox" name="entry-type" value="PD"> PD</label>
+                                <label><input type="checkbox" name="entry-type" value="ID"> ID</label>
+                                <label><input type="checkbox" name="entry-type" value="BIB"> BIB</label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Pedagogical Priority</label>
+                            <div class="checkbox-group">
+                                <label><input type="checkbox" name="entry-pp" value="PP01"> PP01</label>
+                                <label><input type="checkbox" name="entry-pp" value="PP02"> PP02</label>
+                                <label><input type="checkbox" name="entry-pp" value="PP03"> PP03</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Focus Areas</label>
+                        <div class="checkbox-group focus-checkboxes">
+                            <label><input type="checkbox" name="entry-fa" value="FA01"> FA01: Curriculum</label>
+                            <label><input type="checkbox" name="entry-fa" value="FA02"> FA02: Program Structure</label>
+                            <label><input type="checkbox" name="entry-fa" value="FA03"> FA03: Studio Methods</label>
+                            <label><input type="checkbox" name="entry-fa" value="FA04"> FA04: Technology</label>
+                            <label><input type="checkbox" name="entry-fa" value="FA05"> FA05: Social Justice</label>
+                            <label><input type="checkbox" name="entry-fa" value="FA06"> FA06: Collaboration</label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="entry-citation">Citation</label>
+                        <textarea id="entry-citation" rows="2" placeholder="Full citation reference..."></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="entry-connections">Related Entries (IDs, comma-separated)</label>
+                        <input type="text" id="entry-connections" placeholder="e.g., 15, 23, 45">
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary" id="cancel-entry">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Add Entry</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Search -->
+        <div class="search-container">
+            <input type="text" id="search-input" placeholder="Search entries...">
+            <div class="search-results" id="search-results"></div>
+        </div>
+        
+        <!-- Share Modal -->
+        <div class="modal-overlay" id="share-modal">
+            <div class="modal modal-small">
+                <div class="modal-header">
+                    <h2>Share This View</h2>
+                    <button class="close-modal" id="close-share-modal">&times;</button>
+                </div>
+                <div class="share-content">
+                    <p>Copy this URL to share your current view:</p>
+                    <div class="share-url-container">
+                        <input type="text" id="share-url" readonly>
+                        <button class="btn btn-primary" id="copy-url-btn">Copy</button>
+                    </div>
+                    <p class="share-note">This link preserves your current filters and selected node.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="data.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>

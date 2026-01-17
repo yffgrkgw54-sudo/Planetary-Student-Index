@@ -3,258 +3,197 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Planetary Student Timeline | Network Visualization</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>Planetary Student in Landscape Architecture Index</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'IBM Plex Sans', sans-serif;
+            background-color: #ffffff;
+            color: #0a0a0a;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .landing-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        
+        .logo-container {
+            width: 100%;
+            max-width: 600px;
+            margin-bottom: 40px;
+            cursor: pointer;
+            transition: transform 0.3s ease, opacity 0.3s ease;
+        }
+        
+        .logo-container:hover {
+            transform: scale(1.02);
+            opacity: 0.9;
+        }
+        
+        .logo-container img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+        
+        .enter-prompt {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.85rem;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: #666;
+            margin-top: 20px;
+            padding: 12px 24px;
+            border: 1px solid #ccc;
+            background: transparent;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .enter-prompt:hover {
+            background: #0a0a0a;
+            color: #fff;
+            border-color: #0a0a0a;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 40px;
+            margin-top: 60px;
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.75rem;
+            letter-spacing: 0.1em;
+        }
+        
+        .nav-links a {
+            color: #666;
+            text-decoration: none;
+            text-transform: uppercase;
+            transition: color 0.2s ease;
+        }
+        
+        .nav-links a:hover {
+            color: #0a0a0a;
+        }
+        
+        .focus-areas {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            max-width: 700px;
+            margin-top: 60px;
+            padding-top: 40px;
+            border-top: 1px solid #eee;
+        }
+        
+        .focus-area {
+            text-align: center;
+            flex: 1;
+            padding: 0 15px;
+        }
+        
+        .focus-area-label {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.65rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: #999;
+            margin-bottom: 8px;
+        }
+        
+        .focus-area-title {
+            font-size: 0.8rem;
+            font-weight: 400;
+            color: #333;
+            line-height: 1.4;
+        }
+        
+        .credits {
+            margin-top: 80px;
+            padding-top: 30px;
+            border-top: 1px solid #eee;
+            text-align: center;
+            font-size: 0.75rem;
+            color: #999;
+            line-height: 1.8;
+        }
+        
+        .credits strong {
+            color: #666;
+            font-weight: 500;
+        }
+        
+        @media (max-width: 600px) {
+            .focus-areas {
+                flex-direction: column;
+                gap: 30px;
+            }
+            
+            .nav-links {
+                flex-direction: column;
+                gap: 20px;
+                text-align: center;
+            }
+        }
+    </style>
 </head>
 <body>
-    <div class="app-container">
-        <!-- Header -->
-        <header class="header">
-            <div class="header-left">
-                <h1 class="title">Planetary Student</h1>
-                <span class="subtitle">Timeline Network</span>
+    <div class="landing-container">
+        <a href="network.html" class="logo-container">
+            <img src="assets/Exhibition_Web_Image_01.jpg" alt="Design Pedagogies for the Planetary Student in Landscape Architecture">
+        </a>
+        
+        <a href="network.html" class="enter-prompt">Enter the Index</a>
+        
+        <nav class="nav-links">
+            <a href="network.html">Network View</a>
+            <a href="network.html?view=timeline">Timeline View</a>
+            <a href="about.html">About</a>
+        </nav>
+        
+        <div class="focus-areas">
+            <div class="focus-area">
+                <div class="focus-area-label">Focus Area A</div>
+                <div class="focus-area-title">Knowledge Reconfigurations</div>
             </div>
-            <div class="header-right">
-                <div class="view-toggle">
-                    <button class="view-btn active" data-view="network">Network</button>
-                    <button class="view-btn" data-view="timeline">Timeline</button>
-                </div>
+            <div class="focus-area">
+                <div class="focus-area-label">Focus Area B</div>
+                <div class="focus-area-title">Material Interactivity</div>
             </div>
-        </header>
-
-        <!-- Main Content Area -->
-        <main class="main-content">
-            <!-- Filter Panel -->
-            <aside class="filter-panel">
-                <div class="filter-section">
-                    <h3 class="filter-title">Entry Type</h3>
-                    <div class="filter-group">
-                        <label class="filter-item">
-                            <input type="checkbox" value="PD" checked>
-                            <span class="filter-swatch" data-type="PD"></span>
-                            <span>Pedagogical Development</span>
-                        </label>
-                        <label class="filter-item">
-                            <input type="checkbox" value="ID" checked>
-                            <span class="filter-swatch" data-type="ID"></span>
-                            <span>Institutional Development</span>
-                        </label>
-                        <label class="filter-item">
-                            <input type="checkbox" value="BIB" checked>
-                            <span class="filter-swatch" data-type="BIB"></span>
-                            <span>Theoretical Foundation</span>
-                        </label>
-                    </div>
-                </div>
-
-                <div class="filter-section">
-                    <h3 class="filter-title">Pedagogical Priority</h3>
-                    <div class="filter-group">
-                        <label class="filter-item">
-                            <input type="checkbox" value="PP01" checked>
-                            <span class="filter-swatch" data-priority="PP01"></span>
-                            <span>PP01: The Discipline</span>
-                        </label>
-                        <label class="filter-item">
-                            <input type="checkbox" value="PP02" checked>
-                            <span class="filter-swatch" data-priority="PP02"></span>
-                            <span>PP02: The Design Studio</span>
-                        </label>
-                        <label class="filter-item">
-                            <input type="checkbox" value="PP03" checked>
-                            <span class="filter-swatch" data-priority="PP03"></span>
-                            <span>PP03: The Academic Program</span>
-                        </label>
-                    </div>
-                </div>
-
-                <div class="filter-section">
-                    <h3 class="filter-title">Focus Area</h3>
-                    <div class="filter-group focus-areas">
-                        <label class="filter-item">
-                            <input type="checkbox" value="FA01" checked>
-                            <span class="filter-swatch" data-focus="FA01"></span>
-                            <span>FA01: Curriculum</span>
-                        </label>
-                        <label class="filter-item">
-                            <input type="checkbox" value="FA02" checked>
-                            <span class="filter-swatch" data-focus="FA02"></span>
-                            <span>FA02: Program Structure</span>
-                        </label>
-                        <label class="filter-item">
-                            <input type="checkbox" value="FA03" checked>
-                            <span class="filter-swatch" data-focus="FA03"></span>
-                            <span>FA03: Studio Methods</span>
-                        </label>
-                        <label class="filter-item">
-                            <input type="checkbox" value="FA04" checked>
-                            <span class="filter-swatch" data-focus="FA04"></span>
-                            <span>FA04: Technology</span>
-                        </label>
-                        <label class="filter-item">
-                            <input type="checkbox" value="FA05" checked>
-                            <span class="filter-swatch" data-focus="FA05"></span>
-                            <span>FA05: Social Justice</span>
-                        </label>
-                        <label class="filter-item">
-                            <input type="checkbox" value="FA06" checked>
-                            <span class="filter-swatch" data-focus="FA06"></span>
-                            <span>FA06: Collaboration</span>
-                        </label>
-                    </div>
-                </div>
-
-                <div class="filter-section">
-                    <h3 class="filter-title">Time Period</h3>
-                    <div class="time-slider">
-                        <div class="slider-labels">
-                            <span id="time-start">1857</span>
-                            <span id="time-end">2025</span>
-                        </div>
-                        <input type="range" id="time-range-start" min="1857" max="2025" value="1857">
-                        <input type="range" id="time-range-end" min="1857" max="2025" value="2025">
-                    </div>
-                </div>
-
-                <div class="filter-section">
-                    <h3 class="filter-title">Node Display</h3>
-                    <div class="node-display-options">
-                        <label class="radio-item">
-                            <input type="radio" name="node-display" value="type" checked>
-                            <span>By Entry Type</span>
-                        </label>
-                        <label class="radio-item">
-                            <input type="radio" name="node-display" value="priority">
-                            <span>By Pedagogical Priority</span>
-                        </label>
-                        <label class="radio-item">
-                            <input type="radio" name="node-display" value="focus">
-                            <span>By Focus Area</span>
-                        </label>
-                        <label class="radio-item">
-                            <input type="radio" name="node-display" value="era">
-                            <span>By Era</span>
-                        </label>
-                    </div>
-                </div>
-
-                <div class="filter-actions">
-                    <button class="btn btn-secondary" id="reset-filters">Reset Filters</button>
-                    <button class="btn btn-primary" id="add-entry-btn">+ Add Entry</button>
-                </div>
-            </aside>
-
-            <!-- Visualization Area -->
-            <div class="visualization-area">
-                <div id="network-view" class="view-container active">
-                    <svg id="network-svg"></svg>
-                </div>
-                <div id="timeline-view" class="view-container">
-                    <div id="timeline-content"></div>
-                </div>
-            </div>
-
-            <!-- Detail Panel -->
-            <aside class="detail-panel" id="detail-panel">
-                <button class="close-panel" id="close-detail">&times;</button>
-                <div class="detail-content">
-                    <div class="detail-placeholder">
-                        <p>Select a node to view details</p>
-                    </div>
-                </div>
-            </aside>
-        </main>
-
-        <!-- Add Entry Modal -->
-        <div class="modal-overlay" id="add-entry-modal">
-            <div class="modal">
-                <div class="modal-header">
-                    <h2>Add New Entry</h2>
-                    <button class="close-modal" id="close-modal">&times;</button>
-                </div>
-                <form class="entry-form" id="entry-form">
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="entry-year">Year</label>
-                            <input type="number" id="entry-year" min="1800" max="2030" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="entry-location">Location</label>
-                            <input type="text" id="entry-location" placeholder="City, Country">
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="entry-title">Title</label>
-                        <input type="text" id="entry-title" required placeholder="Brief descriptive title">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="entry-description">Description</label>
-                        <textarea id="entry-description" rows="4" required placeholder="Full description of the development..."></textarea>
-                    </div>
-
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label>Entry Type</label>
-                            <div class="checkbox-group">
-                                <label><input type="checkbox" name="entry-type" value="PD"> PD</label>
-                                <label><input type="checkbox" name="entry-type" value="ID"> ID</label>
-                                <label><input type="checkbox" name="entry-type" value="BIB"> BIB</label>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label>Pedagogical Priority</label>
-                            <div class="checkbox-group">
-                                <label><input type="checkbox" name="entry-pp" value="PP01"> PP01</label>
-                                <label><input type="checkbox" name="entry-pp" value="PP02"> PP02</label>
-                                <label><input type="checkbox" name="entry-pp" value="PP03"> PP03</label>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label>Focus Areas</label>
-                        <div class="checkbox-group focus-checkboxes">
-                            <label><input type="checkbox" name="entry-fa" value="FA01"> FA01: Curriculum</label>
-                            <label><input type="checkbox" name="entry-fa" value="FA02"> FA02: Program Structure</label>
-                            <label><input type="checkbox" name="entry-fa" value="FA03"> FA03: Studio Methods</label>
-                            <label><input type="checkbox" name="entry-fa" value="FA04"> FA04: Technology</label>
-                            <label><input type="checkbox" name="entry-fa" value="FA05"> FA05: Social Justice</label>
-                            <label><input type="checkbox" name="entry-fa" value="FA06"> FA06: Collaboration</label>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="entry-citation">Citation</label>
-                        <textarea id="entry-citation" rows="2" placeholder="Full citation reference..."></textarea>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="entry-connections">Related Entries (IDs, comma-separated)</label>
-                        <input type="text" id="entry-connections" placeholder="e.g., 15, 23, 45">
-                    </div>
-
-                    <div class="form-actions">
-                        <button type="button" class="btn btn-secondary" id="cancel-entry">Cancel</button>
-                        <button type="submit" class="btn btn-primary">Add Entry</button>
-                    </div>
-                </form>
+            <div class="focus-area">
+                <div class="focus-area-label">Focus Area C</div>
+                <div class="focus-area-title">Ethics, Reparation & Care</div>
             </div>
         </div>
-
-        <!-- Search -->
-        <div class="search-container">
-            <input type="text" id="search-input" placeholder="Search entries...">
-            <div class="search-results" id="search-results"></div>
+        
+        <div class="credits">
+            <strong>Dr. Rosalea Monacella</strong><br>
+            Harvard Graduate School of Design<br><br>
+            <span style="font-size: 0.7rem;">
+                Special thanks to: Dan Borelli, David Zimmerman & the exhibition team,
+                Sarah Whiting, Gary Hilderbrand, Craig Douglas, Sean Hogan, Simone Sandholz,
+                Alessandro Martinelli, Charles Waldheim, Makio Yamamoto, Racha Doughman, Fran Arrieta
+            </span>
         </div>
     </div>
-
-    <script src="https://d3js.org/d3.v7.min.js"></script>
-    <script src="data.js"></script>
-    <script src="app.js"></script>
 </body>
 </html>
