@@ -855,7 +855,6 @@ class PlanetaryStudentNetwork {
         a.click();
         URL.revokeObjectURL(url);
     }
-}
 
     // ========================================
     // RADIAL VIEW
